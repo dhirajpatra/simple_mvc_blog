@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title><?php echo $title; ?></title>
+    <style>
+        .container_form{
+            margin-left: 25%;
+            width:50%;
+
+        }
+
+    </style>
+    <script src="../../../tinymce/js/tinymce/tinymce.min.js"></script>
+    <script>tinymce.init({ selector:'textarea' });</script>
+</head>
+<body>
+
+<?php include HOME . DS . 'includes' . DS . 'menuloggedin.inc.php'; ?>
+<div class="container_form">
+    <h1><?php echo $title; ?></h1>
+
+    <?php
+    if (isset($errors))
+    {
+        echo '<ul>';
+        foreach ($errors as $e)
+        {
+            echo '<li>' . $e . '</li>';
+        }
+        echo '</ul>';
+    }
+
+    if (isset($saveError))
+    {
+        echo "<h2>Error article data. Please try again.</h2>" . $saveError;
+    }
+    ?>
+
+    <form action="<?php echo ROOT;?>/index/save" method="post">
+
+        <p>
+            <label for="title">Title:</label>
+            <input value="<?php if(isset($formData)) echo $formData['title']; ?>" type="text" id="title" name="title" />
+        </p>
+
+        <p>
+            <label for="intro">Introduction:</label>
+            <input value="<?php if(isset($formData)) echo $formData['intro']; ?>" type="text" id="intro" name="intro" />
+        </p>
+        <p>
+            <label for="article">Body:</label>
+            <textarea id="article" name="article" cols="100" rows="15"><?php if(isset($formData)) echo $formData['article']; ?></textarea>
+        </p>
+
+        <p><input type="submit" name="articleFormSubmit" value="Save" /></p>
+    </form>
+</div>
+<?php include HOME . DS . 'includes' . DS . 'footer.inc.php'; ?>
+</body>
+</html>

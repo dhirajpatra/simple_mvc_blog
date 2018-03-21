@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title><?php echo $title; ?></title>
+        <style>
+            .container_form{
+                margin-left: 25%;
+                width:50%;
+
+            }
+
+        </style>
+    </head>
+    <body>
+
+		<?php include HOME . DS . 'includes' . DS . 'menu.inc.php'; ?>
+        <div class="container_form">
+		<h1><?php echo $title; ?></h1>
+		
+		<?php 
+		if (isset($errors)) 
+		{
+			echo '<ul>';
+			foreach ($errors as $e)
+			{
+				echo '<li>' . $e . '</li>';
+			}
+			echo '</ul>';
+		} 
+		
+		if (isset($saveError))
+		{
+			echo "<h2>Error login data. Please try again.</h2>" . $saveError;
+		}
+		?>
+		
+		<form action="<?php echo ROOT;?>/user/login" method="post">
+			
+			<p>
+				<label for="username">User Name:</label>
+				<input value="<?php if(isset($formData)) echo $formData['username']; ?>" type="text" id="username" name="username" />
+			</p>
+			
+			<p>
+				<label for="password">Password:</label>
+				<input value="<?php if(isset($formData)) echo $formData['password']; ?>" type="password" id="password" name="password" />
+			</p>
+			
+			<p><input type="submit" name="loginFormSubmit" value="Send" /></p>
+		</form>
+			<small>You can use [markus, 12345678] or [dhirajpatra, 12345678]</small>
+        </div>
+		<?php include HOME . DS . 'includes' . DS . 'footer.inc.php'; ?>
+    </body>
+</html>

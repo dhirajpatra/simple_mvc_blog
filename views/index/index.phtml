@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title><?php echo $title; ?></title>
+        <style>
+            .container{
+                margin: 50px;
+                width:90%;
+
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <div class = "container">
+
+            <?php
+            if (isset($_SESSION['user_id'])):
+                include HOME . DS . 'includes' . DS . 'menuloggedin.inc.php';
+            else:
+                include HOME . DS . 'includes' . DS . 'menu.inc.php';
+            endif;
+
+            if ($articles):
+                foreach ($articles as $a):
+                    if (is_array($a)):
+                    ?>
+
+                    <article>
+                        <header>
+                            <h1><a href="<?php echo ROOT; ?>/index/details/<?php echo $a['id']; ?>"><?php echo $a['title']; ?></a></h1>
+                            <p>Published on: <time pubdate="pubdate"><?php echo $a['date']; ?></time></p>
+                        </header>
+                        <p><?php echo $a['intro']; ?></p>
+                        <p>Author: <?php echo $a['username']; ?></p>
+                        <p>No of comments: <?php echo $a['comments']; ?></p>
+                        <p><a href="<?php echo ROOT; ?>/index/details/<?php echo $a['id']; ?>">Continue reading</a></p>
+                        <hr/>
+                    </article>
+                    <?php
+                        endif;
+                endforeach;
+
+                $totalPages = ceil($articles['total'] / PER_PAGE);
+                $page = $articles['page'];
+
+                if($page <=1 ):
+                    echo "<span id='page_links' style='font-weight: bold;'> Prev </span>";
+
+                else:
+                    $j = $page - 1;
+                    echo "<span><a id='page_a_link' href='".ROOT."/index/index/page=$j'> < Prev </a></span>";
+
+                endif;
+
+                for($i=1; $i <= $totalPages; $i++):
+
+                    if($i<>$page):
+                        echo "<span><a id='page_a_link' href='".ROOT."/index/index/page=$i'> $i </a></span>";
+                    else:
+                        echo "<span id='page_links' style='font-weight: bold;'> $i </span>";
+
+                    endif;
+                endfor;
+
+                if($page == $totalPages ):
+                    echo "<span id='page_links' style='font-weight: bold;'> Next ></span>";
+                else:
+                    $j = $page + 1;
+                    echo "<span><a id='page_a_link' href='".ROOT."/index/index/page=".$j."'> Next </a></span>";
+                endif;
+
+
+             else: ?>
+
+                <h1>Welcome!</h1>
+                <p>We currently do not have any articles.</p>
+
+            <?php endif; ?>
+
+            <?php include HOME . DS . 'includes' . DS . 'footer.inc.php'; ?>
+        </div>
+
+    </body>
+</html>

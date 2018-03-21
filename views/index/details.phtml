@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="utf-8" />
+        <title><?php echo $title; ?> | Article Details</title>
+		<style>
+			.container{
+				margin: 50px;
+				width:90%;
+
+			}
+
+		</style>
+    </head>
+    <body>
+
+	<div class = "container">
+		<?php
+
+        if (isset($_SESSION['user_id'])):
+            include HOME . DS . 'includes' . DS . 'menuloggedin.inc.php';
+        else:
+            include HOME . DS . 'includes' . DS . 'menu.inc.php';
+        endif;
+
+        if (!isset($noArticle)): ?>
+		
+			<article>
+				<header>
+					<h1><?php echo $title; ?></h1>
+					<p>Published on: <time pubdate="pubdate"><?php echo $datePublished; ?></time>
+                        <?php
+                        if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $userId):
+                            ?>
+                            <span><a href="<?php echo ROOT; ?>/index/update/<?php echo $articleId; ?>">Edit</a></span>
+                            <?php
+                        endif;
+                        ?>
+
+                        <?php
+                        if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $userId):
+                        ?>
+                        <span><a href="<?php echo ROOT; ?>/index/delete/<?php echo $articleId; ?>" onclick="return confirm('Are you sure?')">Delete</a></span>
+                        <?php
+                        endif;
+                        ?>
+                    </p>
+                    <p>IP: <?php echo $ip; ?></p>
+				</header>
+				<p>
+					<?php echo $articleBody; ?>
+				</p>
+                
+
+                    <?php
+                    if ($comments):
+                    foreach ($comments as $comment): ?>
+
+                        <p>Comments: <?php echo $comment['comment']; ?> by <i><?php echo $comment['username']; ?></i></p>
+
+                        <hr/>
+                        <?php
+                    endforeach;
+                    ?>
+
+                    <?php endif; ?>
+                        
+                </p>
+
+                <b>Leave A Comment</b>
+                <?php
+                if (isset($errors))
+                {
+                    echo '<ul>';
+                    foreach ($errors as $e)
+                    {
+                        echo '<li>' . $e . '</li>';
+                    }
+                    echo '</ul>';
+                }
+
+                if (isset($saveError))
+                {
+                    echo "<h2>Error Comment data. Please try again.</h2>" . $saveError;
+                }
+                ?>
+
+                <form action="<?php echo ROOT;?>/index/comment" method="post">
+                    <input type="hidden" name="article_id" id="article_id" value="<?php echo $articleId; ?>">
+                    <p>
+                        <label for="username">User Name:</label>
+                        <input value="<?php if(isset($formData)) echo $formData['username']; ?>" type="text" id="username" name="username" />
+                    </p>
+
+                    <p>
+                        <label for="mail">Email:</label><small>[optional]</small>
+                        <input value="<?php if(isset($formData)) echo $formData['mail']; ?>" type="text" id="mail" name="mail" />
+                    </p>
+                    <p>
+                        <label for="url">URL:</label><small>[optional]</small>
+                        <input value="<?php if(isset($formData)) echo $formData['url']; ?>" type="text" id="url" name="url" />
+                    </p>
+                    <p>
+                        <label for="remark">Remark:</label>
+                        <textarea id="remark" name="remark"><?php if(isset($formData)) echo $formData['remark']; ?></textarea>
+                    </p>
+
+                    <p><input type="submit" name="commentFormSubmit" value="Send" /></p>
+                </form>
+
+
+			</article>
+		
+		<?php else: ?>
+		
+			<h1>There is no article with the ID you specified.</h1>
+		
+		<?php endif; ?>
+		
+		<a href="<?php echo ROOT; ?>/">Back to article list</a>
+
+		<?php include HOME . DS . 'includes' . DS . 'footer.inc.php'; ?>
+		</div>
+    </body>
+</html>
